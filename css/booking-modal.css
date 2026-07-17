@@ -968,3 +968,36 @@ input:checked + .slider:before {
 .confirm-btn-submit:hover {
     background: #d8ecd0;
 }
+
+/* Header Mobile Nav Links (side-by-side) */
+@media (max-width: 1199px) {
+    .main-menu.bighide {
+        display: inline-block !important;
+    }
+    
+    .main-menu.bighide .mobile-menu__nav {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 12px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+    
+    .main-menu.bighide .mobile-menu__nav li {
+        float: none !important;
+        display: inline-block !important;
+        width: auto !important;
+        margin: 0 !important;
+    }
+    
+    .main-menu.bighide .mobile-menu__nav li a {
+        font-size: clamp(1.3rem, 1.4vw, 1.6rem) !important;
+        padding: 6px 8px !important;
+        white-space: nowrap !important;
+        border: none !important;
+        text-transform: uppercase !important;
+        font-family: Graphik, sans-serif !important;
+    }
+}
