@@ -4,21 +4,9 @@
     // 1. Create Modal HTML Element and append to body
     const modalHTML = `
     <div class="booking-overlay" id="bookingOverlay">
-        <div class="booking-phone">
-            <!-- Notch Mockup -->
-            <div class="phone-notch-container">
-                <div class="phone-notch"></div>
-            </div>
-            
+        <div class="booking-phone booking-popup">
             <!-- Close Button -->
             <button class="booking-close" id="bookingClose" aria-label="Fechar">&times;</button>
-            
-            <!-- Progress Bar -->
-            <div class="booking-progress">
-                <span class="progress-step active" id="pStep1">1. Parte</span>
-                <span class="progress-step" id="pStep2">2. Data</span>
-                <span class="progress-step" id="pStep3">3. Pago</span>
-            </div>
             
             <!-- Content Area -->
             <div class="booking-content" id="bookingContent">
@@ -45,17 +33,12 @@
                         </label>
                     </div>
                     
-                    <label class="form-label">Imagem de referência (Opcional):</label>
-                    <div class="upload-area" id="uploadArea">
-                        <span class="upload-icon">📷</span>
-                        <span class="upload-text">Escolher Arquivo</span>
-                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    <label class="form-label">Link da Imagem de referência (Opcional):</label>
+                    <div class="url-input-container" id="urlInputArea" style="display: flex; gap: 8px; margin-bottom: 12px;">
+                        <input type="text" id="urlInput" class="booking-input" placeholder="Cole o link da imagem (ex: Pinterest, Instagram, etc.)..." style="flex: 1; border-bottom: 1px solid rgba(231, 243, 226, 0.3); margin-bottom: 0; padding: 6px 0;">
+                        <button type="button" class="booking-btn" id="btnConfirmUrl" style="flex: 0 0 auto; width: auto; padding: 8px 12px; margin: 0; font-size: 10px;">Adicionar</button>
                     </div>
-                    <div class="upload-preview-container" id="uploadPreview">
-                        <img src="" alt="Preview" class="upload-preview-img" id="previewImg">
-                        <span class="upload-preview-info" id="previewName">nome_do_arquivo.jpg</span>
-                        <button class="upload-remove" id="removeUpload" type="button">&times;</button>
-                    </div>
+                    <div class="upload-previews-container" id="uploadPreviewsContainer" style="display: none; margin-top: 12px;"></div>
                 </div>
                 
                 <!-- PHASE 2 -->
@@ -100,58 +83,60 @@
                 
                 <!-- PHASE 3 -->
                 <div class="booking-phase" id="phase3">
-                    <h2 class="phase-title">Pagamento</h2>
+                    <h2 class="phase-title">Confirme suas Escolhas</h2>
                     
                     <div class="summary-box">
                         <div class="summary-row">
                             <span class="summary-label">Tatuagem</span>
-                            <span class="summary-val" id="sumTatoo">Braço</span>
+                            <span class="summary-val-container">
+                                <span class="summary-val" id="sumTatoo">Braço</span>
+                                <button type="button" class="summary-edit-btn" data-step="1">Alterar</button>
+                            </span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Mais de uma</span>
-                            <span class="summary-val" id="sumMulti">Não</span>
+                            <span class="summary-val-container">
+                                <span class="summary-val" id="sumMulti">Não</span>
+                                <button type="button" class="summary-edit-btn" data-step="1">Alterar</button>
+                            </span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Referências</span>
+                            <span class="summary-val-container">
+                                <span class="summary-val" id="sumPhotos">Nenhuma</span>
+                                <button type="button" class="summary-edit-btn" data-step="1" id="btnEditPhotos">Alterar</button>
+                            </span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Data & Hora</span>
-                            <span class="summary-val" id="sumDateTime">-</span>
+                            <span class="summary-val-container">
+                                <span class="summary-val" id="sumDateTime">-</span>
+                                <button type="button" class="summary-edit-btn" data-step="2">Alterar</button>
+                            </span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Cliente</span>
-                            <span class="summary-val" id="sumName">-</span>
+                            <span class="summary-val-container">
+                                <span class="summary-val" id="sumName">-</span>
+                                <button type="button" class="summary-edit-btn" data-step="2">Alterar</button>
+                            </span>
                         </div>
                     </div>
                     
-                    <label class="form-label">Forma de pagamento:</label>
-                    <div class="payment-selector">
-                        <div class="payment-card selected" data-value="presencial">Presencial</div>
-                        <div class="payment-card" data-value="pix">Via Pix</div>
-                    </div>
+                    <div class="summary-previews-container" id="summaryPreviewsContainer" style="display: none; margin-top: 12px; margin-bottom: 16px;"></div>
                     
-                    <!-- Pix Container -->
-                    <div class="pix-details-container" id="pixContainer">
-                        <div class="pix-qr-mock">
-                            <!-- Inline SVG resembling a QR code -->
-                            <svg viewBox="0 0 100 100">
-                                <rect x="0" y="0" width="100" height="100" fill="none" />
-                                <rect x="5" y="5" width="25" height="25" fill="#181818" />
-                                <rect x="10" y="10" width="15" height="15" fill="#fff" />
-                                <rect x="70" y="5" width="25" height="25" fill="#181818" />
-                                <rect x="75" y="10" width="15" height="15" fill="#fff" />
-                                <rect x="5" y="70" width="25" height="25" fill="#181818" />
-                                <rect x="10" y="75" width="15" height="15" fill="#fff" />
-                                <rect x="40" y="40" width="20" height="20" fill="#181818" />
-                                <rect x="45" y="45" width="10" height="10" fill="#fff" />
-                                <!-- Little noise squares -->
-                                <rect x="35" y="10" width="10" height="5" fill="#181818" />
-                                <rect x="50" y="20" width="5" height="10" fill="#181818" />
-                                <rect x="15" y="45" width="10" height="10" fill="#181818" />
-                                <rect x="40" y="70" width="15" height="5" fill="#181818" />
-                                <rect x="80" y="45" width="10" height="15" fill="#181818" />
-                                <rect x="70" y="80" width="15" height="10" fill="#181818" />
-                            </svg>
-                        </div>
-                        <div class="pix-key-box" id="pixKeyText">create.tattoos.pix.chave.ficticia12345</div>
-                        <button type="button" class="pix-copy-btn" id="pixCopyBtn">Copiar Código</button>
+                    <!-- Direct Reference Image URL change inside summary -->
+                    <div class="summary-url-section" id="summaryUrlSection" style="display: flex; gap: 8px; margin-bottom: 20px;">
+                        <input type="text" id="summaryUrlInput" class="booking-input" placeholder="Cole o novo link da imagem..." style="flex: 1; border-bottom: 1px solid rgba(231, 243, 226, 0.3); margin-bottom: 0;">
+                        <button type="button" class="summary-upload-btn" id="btnSummaryUrlAdd" style="width: auto; margin-bottom: 0; padding: 8px 14px; white-space: nowrap;">📷 Trocar Imagem</button>
+                    </div>
+
+                    <div class="confirm-actions-container">
+                        <button type="button" class="confirm-action-btn confirm-btn-whatsapp" id="btnConfirmWhatsapp">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="wpp-icon" style="width: 14px; height: 14px; margin-right: 6px; vertical-align: middle;">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                            </svg>Falar no WhatsApp</button>
+                        <button type="button" class="confirm-action-btn confirm-btn-submit" id="btnConfirmSubmit">Confirmar Agendamento</button>
                     </div>
                 </div>
                 
@@ -174,6 +159,36 @@
             <div class="booking-buttons" id="bookingButtons">
                 <button type="button" class="booking-btn" id="btnBack">Voltar</button>
                 <button type="button" class="booking-btn booking-btn-primary" id="btnNext">Avançar</button>
+            </div>
+
+            <!-- Floating Support Chat inside the popup -->
+            <div class="chat-widget-container" id="chatWidgetContainer">
+                <div class="chat-widget-button" id="chatWidgetButton" aria-label="Suporte">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chat-icon">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                </div>
+                <div class="chat-widget-window" id="chatWidgetWindow">
+                    <div class="chat-widget-header">
+                        <div class="chat-widget-profile">
+                            <span class="chat-widget-avatar">🎨</span>
+                            <div class="chat-widget-status-info">
+                                <span class="chat-widget-name">Suporte Quizz Tattoo</span>
+                                <span class="chat-widget-status"><span class="status-dot"></span> Online</span>
+                            </div>
+                        </div>
+                        <button class="chat-widget-close" id="chatWidgetClose">&times;</button>
+                    </div>
+                    <div class="chat-widget-body" id="chatWidgetBody">
+                        <div class="chat-widget-message system">
+                            Olá! Tem alguma dúvida sobre o agendamento? Digite sua mensagem abaixo para falar conosco diretamente no WhatsApp!
+                        </div>
+                    </div>
+                    <div class="chat-widget-footer">
+                        <textarea class="chat-widget-input" id="chatWidgetInput" placeholder="Digite sua dúvida..." rows="1"></textarea>
+                        <button class="chat-widget-send" id="chatWidgetSend">Enviar</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -200,7 +215,7 @@
     // Form inputs & selections state
     let selectedBodyParts = [];
     let isMultiTattoo = false;
-    let selectedFile = null;
+    let selectedLinks = []; // Array of URL strings
     
     let selectedDate = null; // Date object
     let selectedTimeSlot = null; // String "09:00"
@@ -236,45 +251,127 @@
 
     // Step 1: Multi Toggle
     const multiTattooCheck = document.getElementById('multiTattoo');
+    const uploadPreviewsContainer = document.getElementById('uploadPreviewsContainer');
+    const urlInputArea = document.getElementById('urlInputArea');
+    const urlInput = document.getElementById('urlInput');
+    const btnConfirmUrl = document.getElementById('btnConfirmUrl');
+    
     multiTattooCheck.addEventListener('change', (e) => {
         isMultiTattoo = e.target.checked;
-    });
-
-    // Step 1: Upload reference image
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
-    const uploadPreview = document.getElementById('uploadPreview');
-    const previewImg = document.getElementById('previewImg');
-    const previewName = document.getElementById('previewName');
-    const removeUpload = document.getElementById('removeUpload');
-
-    uploadArea.addEventListener('click', () => {
-        fileInput.click();
-    });
-
-    fileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            selectedFile = file;
-            previewName.textContent = file.name;
-            
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                previewImg.src = evt.target.result;
-                uploadPreview.style.display = 'flex';
-                uploadArea.style.display = 'none';
-            };
-            reader.readAsDataURL(file);
+        if (isMultiTattoo) {
+            urlInput.placeholder = 'Cole outro link da imagem...';
+        } else {
+            urlInput.placeholder = 'Cole o link da imagem (ex: Pinterest, Instagram, etc.)...';
+            // If toggling off, keep only the first link if any exist
+            if (selectedLinks.length > 1) {
+                selectedLinks = selectedLinks.slice(0, 1);
+            }
         }
+        renderPreviews();
     });
 
-    removeUpload.addEventListener('click', (e) => {
-        e.stopPropagation();
-        selectedFile = null;
-        fileInput.value = '';
-        uploadPreview.style.display = 'none';
-        uploadArea.style.display = 'block';
-    });
+    // Step 1: Add Image Link URL logic
+    const addLink = (linkVal) => {
+        let url = linkVal.trim();
+        if (!url) return;
+        
+        // Safety prefix checks
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+
+        if (isMultiTattoo) {
+            if (!selectedLinks.includes(url)) {
+                selectedLinks.push(url);
+            }
+        } else {
+            selectedLinks = [url];
+        }
+        renderPreviews();
+    };
+
+    if (btnConfirmUrl && urlInput) {
+        btnConfirmUrl.addEventListener('click', () => {
+            addLink(urlInput.value);
+            urlInput.value = '';
+        });
+
+        urlInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addLink(urlInput.value);
+                urlInput.value = '';
+            }
+        });
+    }
+
+    function renderPreviews() {
+        uploadPreviewsContainer.innerHTML = '';
+        
+        if (selectedLinks.length === 0) {
+            uploadPreviewsContainer.style.display = 'none';
+            urlInputArea.style.display = 'flex';
+        } else {
+            uploadPreviewsContainer.style.display = 'block';
+            if (isMultiTattoo) {
+                urlInputArea.style.display = 'flex';
+            } else {
+                urlInputArea.style.display = 'none';
+            }
+            
+            selectedLinks.forEach((link, index) => {
+                const item = document.createElement('div');
+                item.className = 'upload-preview-item';
+                
+                // Show thumbnail if it is a valid image URL
+                const img = document.createElement('img');
+                img.src = link;
+                img.className = 'upload-preview-img';
+                
+                const placeholder = document.createElement('div');
+                placeholder.className = 'upload-preview-placeholder';
+                placeholder.textContent = '🔗';
+                placeholder.style.width = '40px';
+                placeholder.style.height = '40px';
+                placeholder.style.background = 'rgba(231, 243, 226, 0.1)';
+                placeholder.style.border = '1px solid rgba(231, 243, 226, 0.2)';
+                placeholder.style.borderRadius = '4px';
+                placeholder.style.display = 'none';
+                placeholder.style.alignItems = 'center';
+                placeholder.style.justifyContent = 'center';
+                placeholder.style.fontSize = '14px';
+
+                img.onerror = () => {
+                    img.style.display = 'none';
+                    placeholder.style.display = 'flex';
+                };
+                
+                const info = document.createElement('span');
+                info.className = 'upload-preview-info';
+                info.textContent = link;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'upload-remove-item';
+                removeBtn.type = 'button';
+                removeBtn.innerHTML = '&times;';
+                
+                removeBtn.addEventListener('click', (evt) => {
+                    evt.stopPropagation();
+                    selectedLinks.splice(index, 1);
+                    renderPreviews();
+                });
+                
+                item.appendChild(img);
+                item.appendChild(placeholder);
+                item.appendChild(info);
+                item.appendChild(removeBtn);
+                uploadPreviewsContainer.appendChild(item);
+            });
+        }
+        
+        updateSummaryPhotosText();
+        renderSummaryPreviews();
+    }
 
     // Step 2: Inputs validation
     const inputName = document.getElementById('custName');
@@ -382,40 +479,169 @@
         }
     }
 
-    // Step 3: Payment method card selection
-    const paymentCards = document.querySelectorAll('.payment-card');
-    const pixContainer = document.getElementById('pixContainer');
+    // Setup Edit buttons in Summary
+    const setupSummaryEditListeners = () => {
+        document.querySelectorAll('.summary-edit-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const step = parseInt(btn.getAttribute('data-step'), 10);
+                if (step >= 1 && step <= 2) {
+                    currentStep = step;
+                    updateStepUI();
+                }
+            });
+        });
+    };
 
-    paymentCards.forEach(card => {
-        card.addEventListener('click', () => {
-            paymentCards.forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            paymentMethod = card.getAttribute('data-value');
-            
-            if (paymentMethod === 'pix') {
-                pixContainer.style.display = 'flex';
-            } else {
-                pixContainer.style.display = 'none';
+    // Summary URL Setup
+    const btnSummaryUrlAdd = document.getElementById('btnSummaryUrlAdd');
+    const summaryUrlInput = document.getElementById('summaryUrlInput');
+    
+    const addSummaryUrl = (linkVal) => {
+        let url = linkVal.trim();
+        if (!url) return;
+        
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+
+        if (isMultiTattoo) {
+            if (!selectedLinks.includes(url)) {
+                selectedLinks.push(url);
+            }
+        } else {
+            selectedLinks = [url];
+        }
+        renderPreviews();
+    };
+
+    if (btnSummaryUrlAdd && summaryUrlInput) {
+        btnSummaryUrlAdd.addEventListener('click', () => {
+            addSummaryUrl(summaryUrlInput.value);
+            summaryUrlInput.value = '';
+        });
+        
+        summaryUrlInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addSummaryUrl(summaryUrlInput.value);
+                summaryUrlInput.value = '';
             }
         });
-    });
+    }
 
-    // Copy Pix key
-    const pixCopyBtn = document.getElementById('pixCopyBtn');
-    const pixKeyText = document.getElementById('pixKeyText').textContent;
-    pixCopyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(pixKeyText).then(() => {
-            const oldText = pixCopyBtn.textContent;
-            pixCopyBtn.textContent = 'Copiado!';
-            pixCopyBtn.style.background = '#e7f3e2';
-            pixCopyBtn.style.color = '#181818';
-            setTimeout(() => {
-                pixCopyBtn.textContent = oldText;
-                pixCopyBtn.style.background = 'transparent';
-                pixCopyBtn.style.color = '#e7f3e2';
-            }, 1500);
+    function updateSummaryPhotosText() {
+        const sumPhotos = document.getElementById('sumPhotos');
+        if (sumPhotos) {
+            if (selectedLinks.length === 0) {
+                sumPhotos.textContent = 'Nenhuma';
+            } else if (selectedLinks.length === 1) {
+                sumPhotos.textContent = '1 imagem';
+            } else {
+                sumPhotos.textContent = `${selectedLinks.length} imagens`;
+            }
+        }
+    }
+
+    function renderSummaryPreviews() {
+        const container = document.getElementById('summaryPreviewsContainer');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        if (selectedLinks.length === 0) {
+            container.style.display = 'none';
+            return;
+        }
+        
+        container.style.display = 'flex';
+        container.style.flexWrap = 'wrap';
+        container.style.gap = '8px';
+        
+        selectedLinks.forEach((link, index) => {
+            const item = document.createElement('div');
+            item.className = 'summary-preview-item';
+            item.style.position = 'relative';
+            item.style.width = '50px';
+            item.style.height = '50px';
+            item.style.border = '1px solid rgba(231, 243, 226, 0.3)';
+            item.style.borderRadius = '4px';
+            item.style.overflow = 'hidden';
+            
+            const img = document.createElement('img');
+            img.src = link;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            
+            const placeholder = document.createElement('div');
+            placeholder.textContent = '🔗';
+            placeholder.style.width = '100%';
+            placeholder.style.height = '100%';
+            placeholder.style.background = 'rgba(231, 243, 226, 0.1)';
+            placeholder.style.display = 'none';
+            placeholder.style.alignItems = 'center';
+            placeholder.style.justifyContent = 'center';
+            placeholder.style.fontSize = '16px';
+
+            img.onerror = () => {
+                img.style.display = 'none';
+                placeholder.style.display = 'flex';
+            };
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.innerHTML = '&times;';
+            removeBtn.style.position = 'absolute';
+            removeBtn.style.top = '2px';
+            removeBtn.style.right = '2px';
+            removeBtn.style.background = 'rgba(0, 0, 0, 0.7)';
+            removeBtn.style.color = '#fff';
+            removeBtn.style.border = 'none';
+            removeBtn.style.borderRadius = '50%';
+            removeBtn.style.width = '16px';
+            removeBtn.style.height = '16px';
+            removeBtn.style.display = 'flex';
+            removeBtn.style.alignItems = 'center';
+            removeBtn.style.justifyContent = 'center';
+            removeBtn.style.fontSize = '10px';
+            removeBtn.style.cursor = 'pointer';
+            
+            removeBtn.addEventListener('click', (evt) => {
+                evt.stopPropagation();
+                selectedLinks.splice(index, 1);
+                renderPreviews();
+            });
+            
+            item.appendChild(img);
+            item.appendChild(placeholder);
+            item.appendChild(removeBtn);
+            container.appendChild(item);
         });
-    });
+    }
+
+    // Custom Confirmation Actions Setup
+    const btnConfirmSubmit = document.getElementById('btnConfirmSubmit');
+    const btnConfirmWhatsapp = document.getElementById('btnConfirmWhatsapp');
+
+    if (btnConfirmSubmit) {
+        btnConfirmSubmit.addEventListener('click', () => {
+            currentStep = 4;
+            updateStepUI();
+        });
+    }
+
+    if (btnConfirmWhatsapp) {
+        btnConfirmWhatsapp.addEventListener('click', () => {
+            const dateStr = selectedDate ? selectedDate.toLocaleDateString('pt-BR') : '';
+            const msg = `Olá! Gostaria de confirmar meu agendamento:\n- Local: ${selectedBodyParts.join(', ')}\n- Mais de uma tattoo: ${isMultiTattoo ? 'Sim' : 'Não'}\n- Links de referência:\n${selectedLinks.join('\n')}\n- Data/Hora: ${dateStr} às ${selectedTimeSlot}\n- Nome: ${custName}\n- Telefone: ${custPhone}\n- Email: ${custEmail}`;
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+            
+            // Go to success phase
+            currentStep = 4;
+            updateStepUI();
+        });
+    }
 
     // 4. Modal Flow Control & Validation
 
@@ -443,40 +669,45 @@
 
     function updateStepUI() {
         // Deactivate all steps and phases
-        [pStep1, pStep2, pStep3].forEach(s => s.classList.remove('active'));
+        [pStep1, pStep2, pStep3].filter(Boolean).forEach(s => s.classList.remove('active'));
         [phase1, phase2, phase3, phaseSuccess].forEach(p => p.classList.remove('active'));
         
         // Reactivate correct step and phase
         if (currentStep === 1) {
-            pStep1.classList.add('active');
+            if (pStep1) pStep1.classList.add('active');
             phase1.classList.add('active');
             btnBack.style.visibility = 'hidden';
             btnNext.textContent = 'Avançar';
+            btnNext.style.display = 'block';
             buttonsArea.style.display = 'flex';
         } else if (currentStep === 2) {
-            pStep2.classList.add('active');
+            if (pStep2) pStep2.classList.add('active');
             phase2.classList.add('active');
             btnBack.style.visibility = 'visible';
             btnNext.textContent = 'Avançar';
+            btnNext.style.display = 'block';
             buttonsArea.style.display = 'flex';
             renderCalendar();
         } else if (currentStep === 3) {
-            pStep3.classList.add('active');
+            if (pStep3) pStep3.classList.add('active');
             phase3.classList.add('active');
             btnBack.style.visibility = 'visible';
-            btnNext.textContent = 'Confirmar';
+            btnNext.style.display = 'none'; // Hide default next/confirm button
             buttonsArea.style.display = 'flex';
             
             // Populate Step 3 Summary details
             document.getElementById('sumTatoo').textContent = selectedBodyParts.join(', ');
             document.getElementById('sumMulti').textContent = isMultiTattoo ? 'Sim' : 'Não';
+            updateSummaryPhotosText();
+            renderSummaryPreviews(); // Call rendering for summary thumbnails
+            setupSummaryEditListeners(); // Bind summary edit links click listeners
             
             const dateStr = selectedDate ? selectedDate.toLocaleDateString('pt-BR') : '';
             document.getElementById('sumDateTime').textContent = `${dateStr} às ${selectedTimeSlot}`;
             document.getElementById('sumName').textContent = custName;
         } else if (currentStep === 4) {
             // Success step
-            pStep3.classList.add('active'); // Keep last progress bar step filled
+            if (pStep3) pStep3.classList.add('active'); // Keep last progress bar step filled
             phaseSuccess.classList.add('active');
             buttonsArea.style.display = 'none'; // Hide next/back buttons
         }
@@ -509,7 +740,7 @@
         currentStep = 1;
         selectedBodyParts = [];
         isMultiTattoo = false;
-        selectedFile = null;
+        selectedLinks = []; // Reset list
         selectedDate = null;
         selectedTimeSlot = null;
         paymentMethod = "presencial";
@@ -519,16 +750,14 @@
         inputPhone.value = '';
         inputEmail.value = '';
         multiTattooCheck.checked = false;
-        fileInput.value = '';
-        uploadPreview.style.display = 'none';
-        uploadArea.style.display = 'block';
+        urlInput.value = '';
+        urlInput.placeholder = 'Cole o link da imagem (ex: Pinterest, Instagram, etc.)...';
+        uploadPreviewsContainer.style.display = 'none';
+        uploadPreviewsContainer.innerHTML = '';
+        urlInputArea.style.display = 'flex';
         
         bodyPartCards.forEach(c => c.classList.remove('selected'));
         timeSlots.forEach(s => s.classList.remove('selected'));
-        
-        paymentCards.forEach(c => c.classList.remove('selected'));
-        paymentCards[0].classList.add('selected'); // presencial selected
-        pixContainer.style.display = 'none';
         
         calCurrentDate = new Date();
         
@@ -579,5 +808,52 @@
     
     // Rerun check periodically in case elements are rendered dynamically
     setInterval(initInterceptors, 2000);
+
+    // 6. Floating Support Chat Logic
+    const chatWidgetButton = document.getElementById('chatWidgetButton');
+    const chatWidgetWindow = document.getElementById('chatWidgetWindow');
+    const chatWidgetClose = document.getElementById('chatWidgetClose');
+    const chatWidgetSend = document.getElementById('chatWidgetSend');
+    const chatWidgetInput = document.getElementById('chatWidgetInput');
+    const WHATSAPP_NUMBER = "5547999999999"; // Substitua pelo seu número
+
+    if (chatWidgetButton && chatWidgetWindow) {
+        chatWidgetButton.addEventListener('click', () => {
+            chatWidgetWindow.classList.toggle('active');
+            if (chatWidgetWindow.classList.contains('active')) {
+                chatWidgetInput.focus();
+            }
+        });
+
+        chatWidgetClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chatWidgetWindow.classList.remove('active');
+        });
+
+        chatWidgetInput.addEventListener('input', () => {
+            chatWidgetInput.style.height = 'auto';
+            chatWidgetInput.style.height = (chatWidgetInput.scrollHeight) + 'px';
+        });
+
+        function sendChatMessage() {
+            const text = chatWidgetInput.value.trim();
+            if (!text) return;
+
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+
+            chatWidgetInput.value = '';
+            chatWidgetInput.style.height = 'auto';
+            chatWidgetWindow.classList.remove('active');
+        }
+
+        chatWidgetSend.addEventListener('click', sendChatMessage);
+        chatWidgetInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendChatMessage();
+            }
+        });
+    }
 
 })();

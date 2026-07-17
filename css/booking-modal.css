@@ -21,20 +21,20 @@
     pointer-events: auto;
 }
 
-/* Phone Container Mockup */
+/* Phone Container Mockup (Modified to clean vertical popup) */
 .booking-phone {
     width: 90%;
-    max-width: 340px;
-    height: 85vh;
-    max-height: 640px;
+    max-width: 320px; /* slightly narrower, more compact */
+    height: auto;
+    max-height: 590px; /* slightly shorter, more compact */
     background: #181818;
-    border: 2px solid #e7f3e2;
-    border-radius: 28px;
+    border: 1px solid rgba(231, 243, 226, 0.2);
+    border-radius: 16px; /* standard clean rounded corners */
     display: flex;
     flex-direction: column;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
     transform: translateY(30px);
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     color: #e7f3e2;
@@ -44,88 +44,54 @@
     transform: translateY(0);
 }
 
-/* Phone Notch & Top Bar Mockup */
+/* Phone Notch & Top Bar Mockup (Hidden) */
 .phone-notch-container {
-    width: 100%;
-    height: 24px;
-    position: relative;
-    background: #101010;
-    flex-shrink: 0;
+    display: none;
 }
 
 .phone-notch {
-    width: 110px;
-    height: 18px;
-    background: #000;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    margin: 0 auto;
-    position: relative;
+    display: none;
 }
 
 /* Modal Close Button */
 .booking-close {
     position: absolute;
-    top: 28px;
-    right: 20px;
+    top: 14px;
+    right: 14px;
     background: none;
     border: none;
     color: #e7f3e2;
     font-size: 24px;
     cursor: pointer;
     z-index: 10;
-    transition: transform 0.2s ease;
-    width: 36px;
-    height: 36px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0.8;
 }
 
 .booking-close:hover {
     transform: scale(1.1);
+    opacity: 1;
 }
 
-/* Step/Progress Indicator */
+/* Step/Progress Indicator (Hidden) */
 .booking-progress {
-    padding: 10px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(231, 243, 226, 0.15);
-    background: #141414;
-    flex-shrink: 0;
+    display: none;
 }
 
 .progress-step {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: rgba(231, 243, 226, 0.4);
-    position: relative;
-    padding-bottom: 4px;
-}
-
-.progress-step.active {
-    color: #e7f3e2;
-    font-weight: 600;
-}
-
-.progress-step.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #e7f3e2;
+    display: none;
 }
 
 /* Content Wrapper */
 .booking-content {
     flex: 1;
     overflow-y: auto;
-    padding: 24px;
+    padding: 40px 24px 24px; /* extra top padding to clear close button */
     display: flex;
     flex-direction: column;
     scrollbar-width: thin;
@@ -289,15 +255,22 @@ input:checked + .slider:before {
     color: rgba(231, 243, 226, 0.6);
 }
 
-.upload-preview-container {
+.upload-previews-container {
     margin-top: 12px;
-    display: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.upload-preview-item {
+    display: flex;
     align-items: center;
     justify-content: space-between;
     background: rgba(255, 255, 255, 0.04);
     padding: 8px 12px;
     border: 1px solid rgba(231, 243, 226, 0.15);
     border-radius: 4px;
+    animation: fadeIn 0.2s ease forwards;
 }
 
 .upload-preview-img {
@@ -318,13 +291,20 @@ input:checked + .slider:before {
     white-space: nowrap;
 }
 
-.upload-remove {
+.upload-remove-item {
     background: none;
     border: none;
     color: #e7f3e2;
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 1;
     cursor: pointer;
     padding: 4px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.upload-remove-item:hover {
+    opacity: 1;
 }
 
 /* Step 2: Calendar UI */
@@ -686,14 +666,290 @@ input:checked + .slider:before {
         border-radius: 0;
         border: none;
     }
-    .phone-notch-container {
-        display: none;
-    }
     .booking-content {
-        padding: 16px;
+        padding: 32px 16px 16px;
     }
     .booking-close {
         top: 12px;
         right: 12px;
     }
+    .chat-widget-container {
+        bottom: 15px;
+        right: 15px;
+    }
+}
+
+/* Floating Support Chat Widget (positioned absolutely inside the popup card) */
+.chat-widget-container {
+    position: absolute;
+    bottom: 85px; /* positioned right above the action buttons footer */
+    right: 16px;
+    z-index: 10000;
+}
+
+.chat-widget-button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #181818;
+    border: 1px solid #e7f3e2;
+    color: #e7f3e2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease;
+}
+
+.chat-widget-button:hover {
+    transform: scale(1.08);
+    background: #202020;
+}
+
+.chat-widget-button .chat-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.chat-widget-window {
+    position: absolute;
+    bottom: 58px;
+    right: 0;
+    width: 250px;
+    height: 290px;
+    background: #181818;
+    border: 1px solid rgba(231, 243, 226, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(15px) scale(0.95);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.chat-widget-window.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.chat-widget-header {
+    background: #141414;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(231, 243, 226, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-widget-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chat-widget-avatar {
+    font-size: 16px;
+}
+
+.chat-widget-status-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-widget-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: #e7f3e2;
+}
+
+.chat-widget-status {
+    font-size: 9px;
+    color: rgba(231, 243, 226, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 1px;
+}
+
+.status-dot {
+    width: 5px;
+    height: 5px;
+    background-color: #2ecc71;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.chat-widget-close {
+    background: none;
+    border: none;
+    color: #e7f3e2;
+    font-size: 18px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.chat-widget-close:hover {
+    opacity: 1;
+}
+
+.chat-widget-body {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(231, 243, 226, 0.2) transparent;
+}
+
+.chat-widget-message {
+    max-width: 85%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.chat-widget-message.system {
+    background: rgba(231, 243, 226, 0.06);
+    color: #e7f3e2;
+    border-top-left-radius: 0;
+    align-self: flex-start;
+    border: 1px solid rgba(231, 243, 226, 0.1);
+}
+
+.chat-widget-footer {
+    padding: 8px;
+    background: #141414;
+    border-top: 1px solid rgba(231, 243, 226, 0.1);
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+}
+
+.chat-widget-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(231, 243, 226, 0.15);
+    border-radius: 14px;
+    color: #e7f3e2;
+    padding: 6px 10px;
+    font-size: 11px;
+    outline: none;
+    resize: none;
+    max-height: 60px;
+    transition: border-color 0.2s ease;
+    line-height: 1.3;
+}
+
+.chat-widget-input:focus {
+    border-color: rgba(231, 243, 226, 0.4);
+}
+
+.chat-widget-send {
+    background: #e7f3e2;
+    color: #181818;
+    border: none;
+    border-radius: 14px;
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.chat-widget-send:hover {
+    background: #d8ecd0;
+}
+
+/* Summary Edit & Action Styles */
+.summary-val-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.summary-edit-btn {
+    border: none;
+    background: transparent;
+    color: #e7f3e2;
+    text-decoration: underline;
+    font-size: 9px;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+    padding: 2px 4px;
+}
+
+.summary-edit-btn:hover {
+    opacity: 1;
+}
+
+.summary-upload-section {
+    margin-bottom: 20px;
+}
+
+.summary-upload-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed rgba(231, 243, 226, 0.3);
+    color: #e7f3e2;
+    padding: 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.summary-upload-btn:hover {
+    border-color: #e7f3e2;
+    background: rgba(231, 243, 226, 0.05);
+}
+
+.confirm-actions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.confirm-action-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.confirm-btn-whatsapp {
+    background: #25d366;
+    color: #fff;
+}
+
+.confirm-btn-whatsapp:hover {
+    background: #20ba5a;
+}
+
+.confirm-btn-submit {
+    background: #e7f3e2;
+    color: #181818;
+}
+
+.confirm-btn-submit:hover {
+    background: #d8ecd0;
 }
